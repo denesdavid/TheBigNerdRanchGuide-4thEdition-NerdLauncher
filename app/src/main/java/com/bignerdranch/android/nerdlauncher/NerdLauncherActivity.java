@@ -60,8 +60,7 @@ public class NerdLauncherActivity extends AppCompatActivity {
             nameTextView.setOnClickListener(this);
         }
 
-        private void bindActivity(ResolveInfo resolveInfo)
-        {
+        private void bindActivity(ResolveInfo resolveInfo) {
             _resolveInfo = resolveInfo;
             PackageManager packageManager = itemView.getContext().getPackageManager();
             String appName = resolveInfo.loadLabel(packageManager).toString();
@@ -74,6 +73,8 @@ public class NerdLauncherActivity extends AppCompatActivity {
 
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.setClassName(activityInfo.applicationInfo.packageName, activityInfo.name);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             Context context = view.getContext();
             context.startActivity(intent);
         }
