@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -47,7 +49,7 @@ public class NerdLauncherActivity extends AppCompatActivity {
         Log.i(TAG, "Found " + activities.size() + activities);
     }
 
-    private class ActivityHolder extends RecyclerView.ViewHolder{
+    private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView nameTextView;
         private ResolveInfo _resolveInfo;
@@ -55,6 +57,7 @@ public class NerdLauncherActivity extends AppCompatActivity {
         public ActivityHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = (TextView) itemView;
+            nameTextView.setOnClickListener(this);
         }
 
         private void bindActivity(ResolveInfo resolveInfo)
@@ -63,6 +66,16 @@ public class NerdLauncherActivity extends AppCompatActivity {
             PackageManager packageManager = itemView.getContext().getPackageManager();
             String appName = resolveInfo.loadLabel(packageManager).toString();
             nameTextView.setText(appName);
+        }
+
+        @Override
+        public void onClick(View view) {
+            ActivityInfo activityInfo = _resolveInfo.activityInfo;
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setClassName(activityInfo.applicationInfo.packageName, activityInfo.name);
+            Context context = view.getContext();
+            context.startActivity(intent);
         }
     }
 
